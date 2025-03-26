@@ -71,19 +71,21 @@ app.get('/logout', (req, res) => {
 // Save Letter to Google Drive
 app.post('/save-letter', authenticateJWT, async (req, res) => {
   const { content } = req.body;
-  const accessToken = req.user.user._json.access_token;
-
-  console.log("🔹 Access Token:", accessToken); // Debugging
+  const accessToken = req.user.user.accessToken; // Retrieve access token from JWT
 
   if (!accessToken) {
-    return res.status(401).json({ error: 'Access token missing' });
+    return res.status(401).json({ error: 'No access token found' });
+  }
+
+  if (!content) {
+    return res.status(400).json({ error: 'Letter content is required' });
   }
 
   try {
     const fileUrl = await uploadLetterToDrive(accessToken, content);
     res.json({ message: 'Letter saved successfully!', fileUrl });
   } catch (error) {
-    console.error('❌ Google Drive Error:', error.response?.data || error.message);
+    console.error('Error saving letter:', error);
     res.status(500).json({ error: 'Failed to save letter to Google Drive' });
   }
 });

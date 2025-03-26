@@ -8,12 +8,12 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
-      scope: ['profile', 'email', 'openid', 'https://www.googleapis.com/auth/drive.file'],
-      accessType: 'offline',
-      prompt: 'consent',
+      scope: ['profile', 'email', 'https://www.googleapis.com/auth/drive.file'],
+      accessType: 'offline', // This is needed for Drive API
+      prompt: 'consent', // Forces Google to show the consent screen every time
     },
-    (accessToken, refreshToken, profile, done) => {
-      profile.accessToken = accessToken;
+    async (accessToken, refreshToken, profile, done) => {
+      profile.accessToken = accessToken; // Store access token in the profile
       return done(null, profile);
     }
   )
