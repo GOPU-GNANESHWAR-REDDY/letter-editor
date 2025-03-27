@@ -56,7 +56,7 @@ app.get(
       { expiresIn: '1h' }
     );
 
-    res.redirect(`http://localhost:3000?token=${token}`);
+    res.redirect(`https://letter-editor-frontend.netlify.app?token=${token}`);
   }
 );
 
